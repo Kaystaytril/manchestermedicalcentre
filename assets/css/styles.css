@@ -52,7 +52,13 @@
 
 /* ---------- Reset / base ---------- */
 * { margin: 0; padding: 0; box-sizing: border-box; }
-html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; scroll-padding-top: calc(var(--nav-h) + 12px); }
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+  scroll-padding-top: calc(var(--nav-h) + 12px);
+  overflow-x: hidden;          /* clip any stray horizontal overflow (e.g. off-canvas menu) */
+  scrollbar-gutter: stable;    /* reserve scrollbar space so content doesn't shift page-to-page */
+}
 
 body {
   font-family: var(--font-body);
@@ -63,6 +69,7 @@ body {
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
   overflow-x: hidden;
+  max-width: 100%;
 }
 
 img, svg { max-width: 100%; display: block; }
@@ -482,6 +489,14 @@ p:last-child { margin-bottom: 0; }
   .info-strip .i + .i { border-left: 0; border-top: 1px solid rgba(255,255,255,.16); }
   .emergency { flex-direction: column; }
   .nav-actions .btn span.hide-sm { display: none; }
+}
+@media (max-width: 460px) {
+  /* On small phones, drop the header Book button so the wordmark + menu button
+     never crowd or clip. Booking stays one tap away in the sticky bottom bar
+     and inside the slide-out menu. */
+  .nav-actions .btn-book { display: none; }
+  .brand .logo-mark { width: 36px; height: 36px; }
+  .brand-name { font-size: 1rem; }
 }
 
 /* ---------- Reduced motion ---------- */
