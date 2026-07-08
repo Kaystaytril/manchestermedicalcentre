@@ -1,765 +1,389 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Reef Cafe | East London, South Africa</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --bg: #0f1419;
-            --bg-light: #1a2129;
-            --fg: #f5f0e8;
-            --muted: #8b9299;
-            --accent: #e07a5f;
-            --accent-light: #f4a261;
-            --teal: #2a9d8f;
-            --card: #1e272f;
-            --border: #2d3842;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        html {
-            scroll-behavior: smooth;
-        }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--bg);
-            color: var(--fg);
-            overflow-x: hidden;
-        }
-
-        .font-display {
-            font-family: 'Playfair Display', serif;
-        }
-
-        /* Animated background */
-        .hero-bg {
-            position: absolute;
-            inset: 0;
-            background: 
-                radial-gradient(ellipse 80% 50% at 20% 40%, rgba(42, 157, 143, 0.15) 0%, transparent 50%),
-                radial-gradient(ellipse 60% 40% at 80% 60%, rgba(224, 122, 95, 0.12) 0%, transparent 50%),
-                linear-gradient(180deg, var(--bg) 0%, var(--bg-light) 100%);
-            z-index: 0;
-        }
-
-        .wave-pattern {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 200px;
-            opacity: 0.05;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 320'%3E%3Cpath fill='%232a9d8f' d='M0,160L48,176C96,192,192,224,288,213.3C384,203,480,149,576,138.7C672,128,768,160,864,181.3C960,203,1056,213,1152,197.3C1248,181,1344,139,1392,117.3L1440,96L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z'%3E%3C/path%3E%3C/svg%3E");
-            background-size: cover;
-            background-position: bottom;
-        }
-
-        /* Floating particles */
-        .particle {
-            position: absolute;
-            width: 4px;
-            height: 4px;
-            background: var(--teal);
-            border-radius: 50%;
-            opacity: 0.3;
-            animation: float 8s ease-in-out infinite;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0) translateX(0); opacity: 0.3; }
-            50% { transform: translateY(-30px) translateX(10px); opacity: 0.6; }
-        }
-
-        /* Reveal animations */
-        .reveal {
-            opacity: 0;
-            transform: translateY(40px);
-            transition: opacity 0.8s ease, transform 0.8s ease;
-        }
-
-        .reveal.active {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .reveal-delay-1 { transition-delay: 0.1s; }
-        .reveal-delay-2 { transition-delay: 0.2s; }
-        .reveal-delay-3 { transition-delay: 0.3s; }
-        .reveal-delay-4 { transition-delay: 0.4s; }
-
-        /* Button styles */
-        .btn-primary {
-            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%);
-            color: var(--bg);
-            padding: 14px 32px;
-            border-radius: 50px;
-            font-weight: 600;
-            letter-spacing: 0.5px;
-            transition: all 0.3s ease;
-            border: none;
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .btn-primary::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-            transition: left 0.5s ease;
-        }
-
-        .btn-primary:hover::before {
-            left: 100%;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(224, 122, 95, 0.3);
-        }
-
-        .btn-secondary {
-            border: 1px solid var(--border);
-            color: var(--fg);
-            padding: 14px 32px;
-            border-radius: 50px;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            background: transparent;
-            cursor: pointer;
-        }
-
-        .btn-secondary:hover {
-            border-color: var(--teal);
-            color: var(--teal);
-            background: rgba(42, 157, 143, 0.1);
-        }
-
-        /* Menu tabs */
-        .menu-tab {
-            padding: 12px 24px;
-            border-radius: 30px;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            cursor: pointer;
-            background: transparent;
-            border: 1px solid transparent;
-            color: var(--muted);
-        }
-
-        .menu-tab:hover {
-            color: var(--fg);
-        }
-
-        .menu-tab.active {
-            background: var(--card);
-            border-color: var(--border);
-            color: var(--accent);
-        }
-
-        /* Menu item card */
-        .menu-item {
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 24px;
-            transition: all 0.3s ease;
-        }
-
-        .menu-item:hover {
-            border-color: var(--teal);
-            transform: translateY(-4px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-        }
-
-        .menu-item-image {
-            width: 80px;
-            height: 80px;
-            border-radius: 12px;
-            background: linear-gradient(135deg, var(--bg-light) 0%, var(--card) 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-        }
-
-        /* Navigation */
-        .nav-link {
-            position: relative;
-            color: var(--muted);
-            transition: color 0.3s ease;
-        }
-
-        .nav-link::after {
-            content: '';
-            position: absolute;
-            bottom: -4px;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: var(--teal);
-            transition: width 0.3s ease;
-        }
-
-        .nav-link:hover {
-            color: var(--fg);
-        }
-
-        .nav-link:hover::after {
-            width: 100%;
-        }
-
-        /* Hours card glow */
-        .glow-teal {
-            box-shadow: 0 0 60px rgba(42, 157, 143, 0.2);
-        }
-
-        /* Image placeholder gradients */
-        .img-placeholder {
-            background: linear-gradient(135deg, var(--bg-light) 0%, var(--card) 100%);
-        }
-
-        /* Scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: var(--bg);
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: var(--border);
-            border-radius: 4px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: var(--muted);
-        }
-
-        /* Mobile menu */
-        .mobile-menu {
-            position: fixed;
-            top: 0;
-            right: -100%;
-            width: 100%;
-            height: 100vh;
-            background: var(--bg);
-            z-index: 100;
-            transition: right 0.4s ease;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            gap: 32px;
-        }
-
-        .mobile-menu.open {
-            right: 0;
-        }
-
-        .mobile-menu a {
-            font-size: 24px;
-            color: var(--fg);
-            text-decoration: none;
-            font-family: 'Playfair Display', serif;
-        }
-
-        /* Reduced motion */
-        @media (prefers-reduced-motion: reduce) {
-            .reveal {
-                opacity: 1;
-                transform: none;
-                transition: none;
-            }
-            .particle {
-                animation: none;
-            }
-            .btn-primary::before {
-                display: none;
-            }
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Manchester Medical Centre | Optometry, Dental &amp; Physiotherapy — Pietermaritzburg</title>
+  <meta name="description" content="Manchester Medical Centre brings eye care, dentistry and physiotherapy together under one roof at Manchester Mall, Rosedale, Pietermaritzburg. Book an appointment online today." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+  <link rel="stylesheet" href="assets/css/styles.css" />
 </head>
 <body>
-    <!-- Navigation -->
-    <nav class="fixed top-0 left-0 right-0 z-50 bg-opacity-90 backdrop-blur-md" style="background: rgba(15, 20, 25, 0.9);">
-        <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-            <a href="#" class="font-display text-2xl font-bold tracking-tight" style="color: var(--fg);">
-                The<span style="color: var(--teal);">Reef</span>
+
+  <!-- ============ HEADER ============ -->
+  <header class="site-header">
+    <div class="container nav">
+      <a href="index.html" class="brand" aria-label="Manchester Medical Centre — home">
+        <svg class="logo-mark" viewBox="0 0 44 44" fill="none" aria-hidden="true">
+          <rect x="1" y="1" width="42" height="42" rx="12" fill="url(#grad-hdr)" />
+          <path d="M22 12.5v19M12.5 22h19" stroke="#fff" stroke-width="3.4" stroke-linecap="round" />
+          <defs><linearGradient id="grad-hdr" x1="2" y1="2" x2="42" y2="42"><stop stop-color="#128f8b" /><stop offset="1" stop-color="#0e5a8a" /></linearGradient></defs>
+        </svg>
+        <span class="brand-name">Manchester Medical<span>Optometry · Dental · Physio</span></span>
+      </a>
+
+      <nav aria-label="Primary">
+        <ul class="nav-menu">
+          <li><a class="nav-link" href="index.html" aria-current="page">Home</a></li>
+          <li><a class="nav-link" href="about.html">About</a></li>
+          <li class="has-dropdown">
+            <a class="nav-link" href="#" aria-haspopup="true" aria-expanded="false">Services
+              <svg class="caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="6 9 12 15 18 9" /></svg>
             </a>
-            
-            <div class="hidden md:flex items-center gap-8">
-                <a href="#about" class="nav-link text-sm uppercase tracking-wider">About</a>
-                <a href="#menu" class="nav-link text-sm uppercase tracking-wider">Menu</a>
-                <a href="#gallery" class="nav-link text-sm uppercase tracking-wider">Gallery</a>
-                <a href="#contact" class="nav-link text-sm uppercase tracking-wider">Find Us</a>
+            <div class="dropdown">
+              <a href="optometry.html"><span class="d-ico" style="background:#e6f1f9"><svg viewBox="0 0 24 24" fill="none" stroke="#1f7fb8" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/></svg></span><span><b>Eye Care</b><small>New Sight Optometry</small></span></a>
+              <a href="dentistry.html"><span class="d-ico" style="background:#e2f5f4"><svg viewBox="0 0 24 24" fill="none" stroke="#10a29c" stroke-width="1.7"><path d="M12 5.5C10.8 4.3 9.4 3.5 7.8 3.5 5.4 3.5 4 5.3 4 7.6c0 1.5.4 2.7.8 4.4.3 1.4.5 3.6 1.1 5.4.4 1.3.9 2.4 1.6 2.4.8 0 1-1.1 1.3-2.6.3-1.6.5-3.1 1.2-3.1s.9 1.5 1.2 3.1c.3 1.5.5 2.6 1.3 2.6.7 0 1.2-1.1 1.6-2.4.6-1.8.8-4 1.1-5.4.4-1.7.8-2.9.8-4.4 0-2.3-1.4-4.1-3.8-4.1-1.6 0-3 .8-4.2 2z"/></svg></span><span><b>Dental</b><small>The Smile Clinic Dentistry</small></span></a>
+              <a href="physiotherapy.html"><span class="d-ico" style="background:#e6f4ec"><svg viewBox="0 0 24 24" fill="none" stroke="#3a9d6a" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></span><span><b>Physiotherapy</b><small>Ms N Paruk</small></span></a>
             </div>
+          </li>
+          <li><a class="nav-link" href="team.html">Our Team</a></li>
+          <li><a class="nav-link" href="contact.html">Contact</a></li>
+        </ul>
+      </nav>
 
-            <a href="#contact" class="hidden md:block btn-primary text-sm">Reserve Table</a>
-
-            <button id="menuToggle" class="md:hidden p-2" aria-label="Toggle menu">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <line x1="3" y1="6" x2="21" y2="6"></line>
-                    <line x1="3" y1="12" x2="21" y2="12"></line>
-                    <line x1="3" y1="18" x2="21" y2="18"></line>
-                </svg>
-            </button>
-        </div>
-    </nav>
-
-    <!-- Mobile Menu -->
-    <div id="mobileMenu" class="mobile-menu">
-        <button id="closeMenu" class="absolute top-6 right-6 p-2" aria-label="Close menu">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <line x1="18" y1="6" x2="6" y2="18"></line>
-                <line x1="6" y1="6" x2="18" y2="18"></line>
-            </svg>
-        </button>
-        <a href="#about" class="mobile-nav-link">About</a>
-        <a href="#menu" class="mobile-nav-link">Menu</a>
-        <a href="#gallery" class="mobile-nav-link">Gallery</a>
-        <a href="#contact" class="mobile-nav-link">Find Us</a>
+      <div class="nav-actions">
+        <a class="nav-phone" data-site="phone" data-fill="no" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.9.36 1.78.7 2.6a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.82.34 1.7.57 2.6.7A2 2 0 0 1 22 16.92z"/></svg><span data-site="phone-text"></span></a>
+        <a class="btn btn-book" href="book.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Book<span class="hide-sm">&nbsp;now</span></a>
+        <button class="nav-toggle" id="navToggle" aria-label="Open menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
+      </div>
     </div>
+  </header>
 
-    <!-- Hero Section -->
-    <section class="relative min-h-screen flex items-center justify-center overflow-hidden">
-        <div class="hero-bg"></div>
-        <div class="wave-pattern"></div>
-        
-        <!-- Particles -->
-        <div class="particle" style="top: 20%; left: 10%; animation-delay: 0s;"></div>
-        <div class="particle" style="top: 60%; left: 85%; animation-delay: 2s;"></div>
-        <div class="particle" style="top: 40%; left: 70%; animation-delay: 4s;"></div>
-        <div class="particle" style="top: 80%; left: 30%; animation-delay: 1s;"></div>
-        <div class="particle" style="top: 30%; left: 50%; animation-delay: 3s;"></div>
+  <!-- ============ MOBILE MENU ============ -->
+  <div class="mobile-menu" id="mobileMenu" aria-label="Mobile navigation">
+    <div class="mm-top">
+      <span class="brand-name">Manchester Medical<span>Pietermaritzburg</span></span>
+      <button class="menu-close" id="menuClose" aria-label="Close menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <a href="index.html">Home</a>
+    <a href="about.html">About</a>
+    <div class="mm-label">Our Practices</div>
+    <div class="mm-sub">
+      <a href="optometry.html">Eye Care — New Sight Optometry</a>
+      <a href="dentistry.html">Dental — The Smile Clinic</a>
+      <a href="physiotherapy.html">Physiotherapy — Ms N Paruk</a>
+    </div>
+    <a href="team.html">Our Team</a>
+    <a href="contact.html">Contact</a>
+    <a class="btn btn-book btn-block" href="book.html">Book an appointment</a>
+    <a class="btn btn-ghost btn-block" data-site="phone" data-fill="no" href="#">Call us</a>
+  </div>
+  <div class="backdrop" id="backdrop"></div>
 
-        <div class="relative z-10 max-w-5xl mx-auto px-6 text-center">
-            <p class="reveal text-sm uppercase tracking-[0.3em] mb-6" style="color: var(--teal);">
-                East London, South Africa
-            </p>
-            <h1 class="reveal reveal-delay-1 font-display text-5xl md:text-7xl lg:text-8xl font-bold mb-6 leading-tight">
-                Where the ocean<br>meets your plate
-            </h1>
-            <p class="reveal reveal-delay-2 text-lg md:text-xl max-w-2xl mx-auto mb-10" style="color: var(--muted);">
-                Fresh coastal cuisine crafted with passion. Locally sourced ingredients, globally inspired flavors, served with warm South African hospitality.
-            </p>
-            <div class="reveal reveal-delay-3 flex flex-col sm:flex-row gap-4 justify-center">
-                <a href="#menu" class="btn-primary">Explore Menu</a>
-                <a href="#contact" class="btn-secondary">View Location</a>
-            </div>
+  <!-- ============ HERO ============ -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-grid">
+        <div>
+          <span class="eyebrow reveal">Now open at Manchester Mall · Pietermaritzburg</span>
+          <h1 class="reveal d1">Eye care, dental &amp; physio — <span class="hl">all under one roof</span></h1>
+          <p class="lead reveal d2">Manchester Medical Centre brings three trusted practices together in one convenient location in Pietermaritzburg's Northern Suburbs — quality optometry, dentistry and physiotherapy for the whole family.</p>
+          <div class="btn-row reveal d3">
+            <a class="btn btn-book btn-lg" href="book.html">Book an appointment</a>
+            <a class="btn btn-ghost btn-lg" href="#practices">Explore our practices</a>
+          </div>
+          <div class="hero-badges reveal d4">
+            <span class="chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>All major medical aids</span>
+            <span class="chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 3h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><path d="M9 17V7h4a3 3 0 0 1 0 6H9"/></svg>Ample free parking</span>
+            <span class="chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Appointments &amp; walk-ins</span>
+          </div>
         </div>
 
-        <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--muted);">
-                <polyline points="6 9 12 15 18 9"></polyline>
-            </svg>
+        <div class="hero-visual reveal d2">
+          <div class="hero-card">
+            <div class="hero-photo">
+              <!-- REPLACE PHOTO: wide photo of the centre reception or shopfront at Manchester Mall -->
+              <div class="photo-slot" data-label="Photo: reception / shopfront">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M3 9l9-6 9 6v11a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z"/><path d="M9 21V12h6v9"/></svg>
+              </div>
+            </div>
+            <div class="hero-mini">
+              <div class="m"><svg viewBox="0 0 24 24" fill="none" stroke="#1f7fb8" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/></svg><span>Eye Care</span><small>Optometry</small></div>
+              <div class="m"><svg viewBox="0 0 24 24" fill="none" stroke="#10a29c" stroke-width="1.6"><path d="M12 5.5C10.8 4.3 9.4 3.5 7.8 3.5 5.4 3.5 4 5.3 4 7.6c0 1.5.4 2.7.8 4.4.3 1.4.5 3.6 1.1 5.4.4 1.3.9 2.4 1.6 2.4.8 0 1-1.1 1.3-2.6.3-1.6.5-3.1 1.2-3.1s.9 1.5 1.2 3.1c.3 1.5.5 2.6 1.3 2.6.7 0 1.2-1.1 1.6-2.4.6-1.8.8-4 1.1-5.4.4-1.7.8-2.9.8-4.4 0-2.3-1.4-4.1-3.8-4.1-1.6 0-3 .8-4.2 2z"/></svg><span>Dental</span><small>Dentistry</small></div>
+              <div class="m"><svg viewBox="0 0 24 24" fill="none" stroke="#3a9d6a" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg><span>Physio</span><small>Rehab</small></div>
+            </div>
+            <div class="hero-float">
+              <span class="dot"></span>
+              <div><b>Now welcoming patients</b><small>Mon–Fri 08h00–17h00 · Sat mornings</small></div>
+            </div>
+          </div>
         </div>
-    </section>
+      </div>
+    </div>
+  </section>
 
-    <!-- About Section -->
-    <section id="about" class="py-24 md:py-32 relative">
-        <div class="max-w-7xl mx-auto px-6">
-            <div class="grid md:grid-cols-2 gap-12 lg:gap-20 items-center">
-                <div class="reveal">
-                    <p class="text-sm uppercase tracking-[0.2em] mb-4" style="color: var(--accent);">Our Story</p>
-                    <h2 class="font-display text-4xl md:text-5xl font-bold mb-6">
-                        Rooted in the<br>Eastern Cape
-                    </h2>
-                    <p class="text-lg mb-6" style="color: var(--muted);">
-                        Born from a love of the ocean and a passion for fresh, honest food, The Reef Cafe has been serving the East London community since 2018. Our kitchen celebrates the bountiful waters of the Wild Coast and the rich agricultural heritage of our region.
-                    </p>
-                    <p class="text-lg mb-8" style="color: var(--muted);">
-                        Every dish tells a story of local fishermen, farmers, and foragers who share our commitment to quality and sustainability. From line-caught fish to organic produce, we believe the best ingredients need little intervention.
-                    </p>
-                    <div class="flex gap-8">
-                        <div>
-                            <p class="font-display text-3xl font-bold" style="color: var(--teal);">6+</p>
-                            <p class="text-sm" style="color: var(--muted);">Years Serving</p>
-                        </div>
-                        <div>
-                            <p class="font-display text-3xl font-bold" style="color: var(--teal);">95%</p>
-                            <p class="text-sm" style="color: var(--muted);">Local Ingredients</p>
-                        </div>
-                        <div>
-                            <p class="font-display text-3xl font-bold" style="color: var(--teal);">4.9</p>
-                            <p class="text-sm" style="color: var(--muted);">Star Rating</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="reveal reveal-delay-2 relative">
-                    <div class="aspect-[4/5] rounded-2xl overflow-hidden img-placeholder flex items-center justify-center">
-                        <svg width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="0.5" style="color: var(--muted); opacity: 0.3;">
-                            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
-                        </svg>
-                    </div>
-                    <div class="absolute -bottom-6 -left-6 bg-opacity-90 backdrop-blur-md p-6 rounded-xl" style="background: var(--card); border: 1px solid var(--border);">
-                        <p class="font-display text-lg font-semibold mb-1">Open Daily</p>
-                        <p style="color: var(--muted);">7:00 AM - 10:00 PM</p>
-                    </div>
-                </div>
+  <!-- ============ INFO STRIP ============ -->
+  <section class="info-strip">
+    <div class="container">
+      <div class="grid">
+        <div class="i"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg><div><b>Manchester Mall</b><small>14 Manchester Rd, Rosedale, PMB</small></div></div>
+        <div class="i"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg><div><b>Mon–Fri 08h00–17h00</b><small>Sat 08h30–13h00</small></div></div>
+        <div class="i"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.9.36 1.78.7 2.6a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.82.34 1.7.57 2.6.7A2 2 0 0 1 22 16.92z"/></svg><div><b data-site="phone-text"></b><small>Call to book or enquire</small></div></div>
+        <div class="i"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg><div><b>Medical aids welcome</b><small>Claims submitted directly</small></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PRACTICES ============ -->
+  <section class="section" id="practices">
+    <div class="container">
+      <div class="section-head center reveal">
+        <span class="eyebrow">Our practices</span>
+        <h2>Three practices, one convenient centre</h2>
+        <p class="lead">Everything your family needs for healthy eyes, teeth and movement — brought together in one welcoming space at Manchester Mall.</p>
+      </div>
+      <div class="grid-3">
+        <article class="disc-card disc-eye reveal">
+          <div class="disc-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/></svg></div>
+          <span class="disc-kicker">New Sight Optometry</span>
+          <h3>Eye Care</h3>
+          <p>Comprehensive eye tests, spectacles and frames, contact lenses, and screening for glaucoma and diabetic eye disease — for every age.</p>
+          <a class="card-link" href="optometry.html">Eye care services <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+        </article>
+        <article class="disc-card disc-dental reveal d1">
+          <div class="disc-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 5.5C10.8 4.3 9.4 3.5 7.8 3.5 5.4 3.5 4 5.3 4 7.6c0 1.5.4 2.7.8 4.4.3 1.4.5 3.6 1.1 5.4.4 1.3.9 2.4 1.6 2.4.8 0 1-1.1 1.3-2.6.3-1.6.5-3.1 1.2-3.1s.9 1.5 1.2 3.1c.3 1.5.5 2.6 1.3 2.6.7 0 1.2-1.1 1.6-2.4.6-1.8.8-4 1.1-5.4.4-1.7.8-2.9.8-4.4 0-2.3-1.4-4.1-3.8-4.1-1.6 0-3 .8-4.2 2z"/></svg></div>
+          <span class="disc-kicker">The Smile Clinic Dentistry</span>
+          <h3>Dental</h3>
+          <p>Gentle, modern dentistry — check-ups and cleaning, fillings, extractions, crowns, dentures, whitening and children's dental care.</p>
+          <a class="card-link" href="dentistry.html">Dental services <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+        </article>
+        <article class="disc-card disc-physio reveal d2">
+          <div class="disc-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
+          <span class="disc-kicker">Ms N Paruk</span>
+          <h3>Physiotherapy</h3>
+          <p>Hands-on rehabilitation for sports and musculoskeletal injuries, back and neck pain, post-operative recovery and chronic pain.</p>
+          <a class="card-link" href="physiotherapy.html">Physiotherapy services <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ WHY US ============ -->
+  <section class="section section--soft">
+    <div class="container">
+      <div class="split">
+        <div class="split-media reveal">
+          <div class="media-frame ratio-43">
+            <!-- REPLACE PHOTO: bright interior / waiting area / a practitioner with a patient -->
+            <div class="photo-slot" data-label="Photo: inside the centre">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
             </div>
+          </div>
         </div>
-    </section>
-
-    <!-- Menu Section -->
-    <section id="menu" class="py-24 md:py-32 relative" style="background: var(--bg-light);">
-        <div class="max-w-7xl mx-auto px-6">
-            <div class="text-center mb-12">
-                <p class="reveal text-sm uppercase tracking-[0.2em] mb-4" style="color: var(--accent);">Our Menu</p>
-                <h2 class="reveal reveal-delay-1 font-display text-4xl md:text-5xl font-bold mb-6">
-                    Fresh from coast to kitchen
-                </h2>
-            </div>
-
-            <!-- Menu Tabs -->
-            <div class="reveal reveal-delay-2 flex flex-wrap justify-center gap-2 mb-12">
-                <button class="menu-tab active" data-category="breakfast">Breakfast</button>
-                <button class="menu-tab" data-category="mains">Mains</button>
-                <button class="menu-tab" data-category="seafood">Seafood</button>
-                <button class="menu-tab" data-category="drinks">Drinks</button>
-            </div>
-
-            <!-- Menu Items Grid -->
-            <div id="menuGrid" class="grid md:grid-cols-2 gap-6">
-                <!-- Items will be populated by JavaScript -->
-            </div>
+        <div class="reveal d1">
+          <span class="eyebrow">Why Manchester Medical Centre</span>
+          <h2>Convenient, caring healthcare close to home</h2>
+          <p class="lead">We brought three established practices together so you can look after your family's eyes, teeth and physical health in a single trip — with friendly reception, easy booking and secure parking, right inside Manchester Mall.</p>
+          <ul class="tick-list">
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg><span><strong>One location, three disciplines</strong> — optometry, dentistry and physiotherapy under one roof.</span></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg><span><strong>Easy access &amp; parking</strong> — ground-floor rooms at the mall with hundreds of free, monitored bays.</span></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg><span><strong>Medical aids welcome</strong> — we submit claims directly, with cash rates for private patients.</span></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg><span><strong>Book online or walk in</strong> — appointments in minutes, or pop in during opening hours.</span></li>
+          </ul>
+          <div class="stat-row">
+            <div class="stat"><b>3</b><small>Practices, one centre</small></div>
+            <div class="stat"><b>500+</b><small>Free parking bays</small></div>
+            <div class="stat"><b>6</b><small>Days a week</small></div>
+          </div>
+          <div class="btn-row" style="margin-top:26px">
+            <a class="btn btn-primary" href="about.html">About the centre</a>
+          </div>
         </div>
-    </section>
+      </div>
+    </div>
+  </section>
 
-    <!-- Gallery Section -->
-    <section id="gallery" class="py-24 md:py-32 relative">
-        <div class="max-w-7xl mx-auto px-6">
-            <div class="text-center mb-12">
-                <p class="reveal text-sm uppercase tracking-[0.2em] mb-4" style="color: var(--accent);">Gallery</p>
-                <h2 class="reveal reveal-delay-1 font-display text-4xl md:text-5xl font-bold">
-                    A taste of The Reef
-                </h2>
-            </div>
+  <!-- ============ TEAM TEASER ============ -->
+  <section class="section">
+    <div class="container">
+      <div class="section-head center reveal">
+        <span class="eyebrow">Meet the team</span>
+        <h2>Trusted local practitioners</h2>
+        <p class="lead">Registered, experienced clinicians who take the time to listen and explain.</p>
+      </div>
+      <div class="grid-3">
+        <article class="team-card disc-eye reveal">
+          <div class="team-photo"><div class="photo-slot" data-label="Photo: optometrist"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg></div></div>
+          <div class="team-body">
+            <div class="role">Optometrist · New Sight Optometry</div>
+            <h3><!-- REPLACE: optometrist name -->Optometrist name</h3>
+            <div class="quals">BOptom · HPCSA registered</div>
+            <p>Comprehensive eye examinations, contact-lens fitting and children's vision.</p>
+          </div>
+        </article>
+        <article class="team-card disc-dental reveal d1">
+          <div class="team-photo"><div class="photo-slot" data-label="Photo: dentist"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg></div></div>
+          <div class="team-body">
+            <div class="role">Dentist · The Smile Clinic</div>
+            <h3><!-- REPLACE: dentist name -->Dr Dentist name</h3>
+            <div class="quals">BChD · HPCSA registered</div>
+            <p>Family and preventative dentistry, restorations and gentle care for nervous patients.</p>
+          </div>
+        </article>
+        <article class="team-card disc-physio reveal d2">
+          <div class="team-photo"><div class="photo-slot" data-label="Photo: physiotherapist"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg></div></div>
+          <div class="team-body">
+            <div class="role">Physiotherapist</div>
+            <h3>Ms N Paruk</h3>
+            <div class="quals">BSc Physiotherapy · HPCSA registered</div>
+            <p>Musculoskeletal and sports rehabilitation, manual therapy and post-operative recovery.</p>
+          </div>
+        </article>
+      </div>
+      <div class="center" style="margin-top:34px">
+        <a class="btn btn-ghost" href="team.html">Meet the full team</a>
+      </div>
+    </div>
+  </section>
 
-            <div class="reveal reveal-delay-2 grid grid-cols-2 md:grid-cols-4 gap-4">
-                <div class="col-span-2 row-span-2 aspect-square rounded-2xl overflow-hidden img-placeholder flex items-center justify-center cursor-pointer transition-transform hover:scale-[1.02]">
-                    <div class="text-center">
-                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" style="color: var(--muted); opacity: 0.3; margin: 0 auto 8px;">
-                            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
-                            <circle cx="8.5" cy="8.5" r="1.5"/>
-                            <polyline points="21 15 16 10 5 21"/>
-                        </svg>
-                        <p class="text-sm" style="color: var(--muted); opacity: 0.5;">Our Space</p>
-                    </div>
-                </div>
-                <div class="aspect-square rounded-2xl overflow-hidden img-placeholder flex items-center justify-center cursor-pointer transition-transform hover:scale-[1.02]">
-                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" style="color: var(--muted); opacity: 0.3;">
-                        <path d="M12 2L2 7l10 5 10-5-10-5z"/>
-                    </svg>
-                </div>
-                <div class="aspect-square rounded-2xl overflow-hidden img-placeholder flex items-center justify-center cursor-pointer transition-transform hover:scale-[1.02]">
-                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" style="color: var(--muted); opacity: 0.3;">
-                        <path d="M12 2L2 7l10 5 10-5-10-5z"/>
-                    </svg>
-                </div>
-                <div class="aspect-square rounded-2xl overflow-hidden img-placeholder flex items-center justify-center cursor-pointer transition-transform hover:scale-[1.02]">
-                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" style="color: var(--muted); opacity: 0.3;">
-                        <path d="M12 2L2 7l10 5 10-5-10-5z"/>
-                    </svg>
-                </div>
-                <div class="aspect-square rounded-2xl overflow-hidden img-placeholder flex items-center justify-center cursor-pointer transition-transform hover:scale-[1.02]">
-                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" style="color: var(--muted); opacity: 0.3;">
-                        <path d="M12 2L2 7l10 5 10-5-10-5z"/>
-                    </svg>
-                </div>
-            </div>
+  <!-- ============ MEDICAL AIDS ============ -->
+  <section class="section section--soft">
+    <div class="container">
+      <div class="section-head center reveal">
+        <span class="eyebrow">Medical aids</span>
+        <h2>We work with your medical aid</h2>
+        <p class="lead">Claims are submitted directly to all major schemes. Not on a medical aid? Ask us about our private cash rates.</p>
+      </div>
+      <div class="aids reveal d1">
+        <span class="aid-pill">Discovery Health</span>
+        <span class="aid-pill">GEMS</span>
+        <span class="aid-pill">Bonitas</span>
+        <span class="aid-pill">Momentum</span>
+        <span class="aid-pill">Medshield</span>
+        <span class="aid-pill">Bestmed</span>
+        <span class="aid-pill">Fedhealth</span>
+        <span class="aid-pill">Medihelp</span>
+        <span class="aid-pill">Profmed</span>
+      </div>
+      <p class="center muted" style="margin-top:16px;font-size:.86rem">Scheme list to be confirmed with the practice. Please have your medical-aid card and ID ready for your visit.</p>
+    </div>
+  </section>
+
+  <!-- ============ LOCATION + EMERGENCY ============ -->
+  <section class="section">
+    <div class="container">
+      <div class="split">
+        <div class="reveal">
+          <span class="eyebrow">Find us</span>
+          <h2>Right inside Manchester Mall</h2>
+          <p class="lead">We're conveniently located at Manchester Mall in Rosedale, in the Northern Suburbs of Pietermaritzburg — with easy access and secure, free parking.</p>
+          <div class="info-card" style="margin-top:8px">
+            <div class="contact-line"><span class="ci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></span><div><b>Address</b><p>Manchester Mall, 14 Manchester Road,<br>Rosedale, Pietermaritzburg, 3201</p></div></div>
+            <div class="contact-line"><span class="ci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></span><div><b>Opening hours</b><p>Mon–Fri 08h00–17h00 · Sat 08h30–13h00<br>Sun &amp; public holidays closed</p></div></div>
+            <div class="contact-line"><span class="ci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.9.36 1.78.7 2.6a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.82.34 1.7.57 2.6.7A2 2 0 0 1 22 16.92z"/></svg></span><div><b>Phone</b><p><a data-site="phone" data-fill="no" href="#"></a></p></div></div>
+          </div>
+          <div class="btn-row" style="margin-top:22px">
+            <a class="btn btn-book" href="book.html">Book an appointment</a>
+            <a class="btn btn-ghost" href="contact.html">Directions &amp; contact</a>
+          </div>
         </div>
-    </section>
-
-    <!-- Contact Section -->
-    <section id="contact" class="py-24 md:py-32 relative" style="background: var(--bg-light);">
-        <div class="max-w-7xl mx-auto px-6">
-            <div class="grid lg:grid-cols-2 gap-12">
-                <div class="reveal">
-                    <p class="text-sm uppercase tracking-[0.2em] mb-4" style="color: var(--accent);">Find Us</p>
-                    <h2 class="font-display text-4xl md:text-5xl font-bold mb-6">
-                        Come visit us
-                    </h2>
-                    <p class="text-lg mb-8" style="color: var(--muted);">
-                        Located in the heart of East London's vibrant beachfront, we're the perfect spot for sunrise breakfasts, leisurely lunches, or memorable dinners with friends and family.
-                    </p>
-
-                    <div class="space-y-6">
-                        <div class="flex items-start gap-4">
-                            <div class="w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0" style="background: var(--card); border: 1px solid var(--border);">
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--teal);">
-                                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
-                                    <circle cx="12" cy="10" r="3"/>
-                                </svg>
-                            </div>
-                            <div>
-                                <p class="font-semibold mb-1">Address</p>
-                                <p style="color: var(--muted);">42 Beach Road, Nahoon<br>East London, 5241<br>South Africa</p>
-                            </div>
-                        </div>
-
-                        <div class="flex items-start gap-4">
-                            <div class="w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0" style="background: var(--card); border: 1px solid var(--border);">
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--teal);">
-                                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72"/>
-                                </svg>
-                            </div>
-                            <div>
-                                <p class="font-semibold mb-1">Phone</p>
-                                <p style="color: var(--muted);">+27 43 726 1234</p>
-                            </div>
-                        </div>
-
-                        <div class="flex items-start gap-4">
-                            <div class="w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0" style="background: var(--card); border: 1px solid var(--border);">
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--teal);">
-                                    <circle cx="12" cy="12" r="10"/>
-                                    <polyline points="12 6 12 12 16 14"/>
-                                </svg>
-                            </div>
-                            <div>
-                                <p class="font-semibold mb-1">Hours</p>
-                                <p style="color: var(--muted);">Mon - Fri: 7:00 AM - 10:00 PM<br>Sat - Sun: 8:00 AM - 11:00 PM</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="reveal reveal-delay-2">
-                    <!-- Map placeholder -->
-                    <div class="aspect-square md:aspect-[4/3] rounded-2xl overflow-hidden glow-teal img-placeholder flex items-center justify-center" style="border: 1px solid var(--border);">
-                        <div class="text-center">
-                            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" style="color: var(--teal); margin: 0 auto 16px;">
-                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
-                                <circle cx="12" cy="10" r="3"/>
-                            </svg>
-                            <p class="font-display text-xl mb-2">Nahoon Beach</p>
-                            <p class="text-sm" style="color: var(--muted);">East London, Eastern Cape</p>
-                        </div>
-                    </div>
-
-                    <!-- Hours Card -->
-                    <div class="mt-6 p-6 rounded-xl" style="background: var(--card); border: 1px solid var(--border);">
-                        <p class="font-display text-lg font-semibold mb-4">Opening Hours</p>
-                        <div class="space-y-2 text-sm">
-                            <div class="flex justify-between">
-                                <span style="color: var(--muted);">Monday - Thursday</span>
-                                <span>7:00 AM - 10:00 PM</span>
-                            </div>
-                            <div class="flex justify-between">
-                                <span style="color: var(--muted);">Friday</span>
-                                <span>7:00 AM - 11:00 PM</span>
-                            </div>
-                            <div class="flex justify-between">
-                                <span style="color: var(--muted);">Saturday</span>
-                                <span>8:00 AM - 11:00 PM</span>
-                            </div>
-                            <div class="flex justify-between">
-                                <span style="color: var(--muted);">Sunday</span>
-                                <span>8:00 AM - 10:00 PM</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <div class="reveal d1">
+          <iframe class="map-embed" title="Map to Manchester Mall, Pietermaritzburg" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="https://www.google.com/maps?q=Manchester%20Mall%2C%2014%20Manchester%20Road%2C%20Rosedale%2C%20Pietermaritzburg&output=embed"></iframe>
         </div>
-    </section>
+      </div>
 
-    <!-- Footer -->
-    <footer class="py-12" style="border-top: 1px solid var(--border);">
-        <div class="max-w-7xl mx-auto px-6">
-            <div class="flex flex-col md:flex-row justify-between items-center gap-6">
-                <div class="text-center md:text-left">
-                    <p class="font-display text-2xl font-bold mb-2">
-                        The<span style="color: var(--teal);">Reef</span>
-                    </p>
-                    <p class="text-sm" style="color: var(--muted);">East London, South Africa</p>
-                </div>
-
-                <div class="flex gap-6">
-                    <a href="#" class="w-10 h-10 rounded-full flex items-center justify-center transition-colors" style="background: var(--card); border: 1px solid var(--border);" aria-label="Instagram">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--muted);">
-                            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
-                            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
-                        </svg>
-                    </a>
-                    <a href="#" class="w-10 h-10 rounded-full flex items-center justify-center transition-colors" style="background: var(--card); border: 1px solid var(--border);" aria-label="Facebook">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--muted);">
-                            <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
-                        </svg>
-                    </a>
-                    <a href="#" class="w-10 h-10 rounded-full flex items-center justify-center transition-colors" style="background: var(--card); border: 1px solid var(--border);" aria-label="TripAdvisor">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--muted);">
-                            <circle cx="6.5" cy="13.5" r="2.5"/>
-                            <circle cx="17.5" cy="13.5" r="2.5"/>
-                            <path d="M12 6c-2.5 0-4.5 1-6 2.5"/>
-                            <path d="M12 6c2.5 0 4.5 1 6 2.5"/>
-                        </svg>
-                    </a>
-                </div>
-
-                <p class="text-sm" style="color: var(--muted);">
-                    &copy; 2024 The Reef Cafe. All rights reserved.
-                </p>
-            </div>
+      <div class="emergency reveal" style="margin-top:40px">
+        <span class="e-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></span>
+        <div>
+          <h3>In an emergency</h3>
+          <p class="muted">Manchester Medical Centre is not a 24-hour emergency service. For a medical emergency after hours, please contact:</p>
+          <div class="nums">
+            <span>Netcare 911: <b>082 911</b></span>
+            <span>ER24: <b>084 124</b></span>
+            <span>Ambulance: <b>10177</b></span>
+            <span>From a cellphone: <b>112</b></span>
+          </div>
         </div>
-    </footer>
+      </div>
+    </div>
+  </section>
 
-    <script>
-        // Menu data
-        const menuData = {
-            breakfast: [
-                { name: "Nahoon Breakfast", description: "Two eggs any style, bacon, wors, grilled tomato, mushrooms, and toast", price: "R95", tag: "Popular" },
-                { name: "Eggs Benedict", description: "Poached eggs, hollandaise, choice of ham or smoked salmon, on english muffin", price: "R115", tag: "" },
-                { name: "Coastal Omelette", description: "Three-egg omelette with prawns, cheese, spring onions, and herbs", price: "R125", tag: "Chef's Pick" },
-                { name: "Avo Toast", description: "Smashed avocado, feta, cherry tomatoes, poached eggs, on sourdough", price: "R85", tag: "" }
-            ],
-            mains: [
-                { name: "Grilled Linefish", description: "Catch of the day, lemon butter sauce, seasonal vegetables, jasmine rice", price: "R185", tag: "Fresh" },
-                { name: "Lamb Chops", description: "Karoo lamb, rosemary jus, roast potatoes, creamed spinach", price: "R195", tag: "" },
-                { name: "Beef Burger", description: "200g grass-fed beef, aged cheddar, caramelized onions, hand-cut chips", price: "R145", tag: "Popular" },
-                { name: "Chicken Pesto Pasta", description: "Grilled chicken, sun-dried tomatoes, cream pesto sauce, penne", price: "R135", tag: "" }
-            ],
-            seafood: [
-                { name: "Seafood Platter", description: "Grilled prawns, calamari, linefish, mussels, lemon butter, tartar sauce", price: "R295", tag: "For Two" },
-                { name: "Calamari Tubes", description: "Tender calamari, garlic butter or peri-peri sauce, rice or chips", price: "R145", tag: "Popular" },
-                { name: "Prawns Mozambique", description: "Jumbo prawns, peri-peri sauce, coconut rice, seasonal salad", price: "R225", tag: "" },
-                { name: "Fish Tacos", description: "Beer-battered linefish, pico de gallo, chipotle mayo, soft tortillas", price: "R125", tag: "Chef's Pick" }
-            ],
-            drinks: [
-                { name: "Fresh Fruit Smoothies", description: "Mango, berry, or tropical blend with yogurt and honey", price: "R45", tag: "" },
-                { name: "Craft Beer Selection", description: "Local Eastern Cape breweries on rotation, ask your server", price: "R45", tag: "Local" },
-                { name: "SA Wine List", description: "Curated selection of Western Cape wines by glass or bottle", price: "From R55", tag: "" },
-                { name: "Refreshers", description: "Fresh lemonade, iced tea, or ginger beer", price: "R35", tag: "" }
-            ]
-        };
+  <!-- ============ CTA ============ -->
+  <section class="section" style="padding-top:0">
+    <div class="container">
+      <div class="cta-band reveal">
+        <div class="split" style="align-items:center;gap:32px">
+          <div>
+            <h2>Ready to book your visit?</h2>
+            <p class="lead">Book online in a minute for eye care, dental or physiotherapy — or give us a call and we'll help you find a time.</p>
+          </div>
+          <div class="btn-row" style="justify-content:flex-end">
+            <a class="btn btn-book btn-lg" href="book.html">Book online</a>
+            <a class="btn btn-outline-white btn-lg" data-site="phone" data-fill="no" href="#">Call the centre</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-        // Initialize menu
-        let currentCategory = 'breakfast';
+  <!-- ============ FOOTER ============ -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="brand">
+            <svg class="logo-mark" viewBox="0 0 44 44" fill="none" aria-hidden="true"><rect x="1" y="1" width="42" height="42" rx="12" fill="url(#grad-ftr)"/><path d="M22 12.5v19M12.5 22h19" stroke="#fff" stroke-width="3.4" stroke-linecap="round"/><defs><linearGradient id="grad-ftr" x1="2" y1="2" x2="42" y2="42"><stop stop-color="#128f8b"/><stop offset="1" stop-color="#0e5a8a"/></linearGradient></defs></svg>
+            <span class="brand-name">Manchester Medical<span>Optometry · Dental · Physio</span></span>
+          </div>
+          <p>Eye care, dentistry and physiotherapy under one roof at Manchester Mall, Rosedale, Pietermaritzburg.</p>
+          <div class="social">
+            <a href="#" aria-label="Facebook"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a>
+            <a data-site="whatsapp" href="#" aria-label="WhatsApp"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.6 6.3A7.9 7.9 0 0 0 12 4a8 8 0 0 0-6.9 12l-1 3.6 3.7-1a8 8 0 0 0 3.8 1h.4a8 8 0 0 0 5.6-13.7zM12 18.5a6.6 6.6 0 0 1-3.4-.9l-.2-.1-2.5.6.6-2.4-.2-.3A6.6 6.6 0 1 1 12 18.5zm3.6-4.9c-.2-.1-1.2-.6-1.4-.6s-.3-.1-.5.1-.5.6-.6.8-.3.2-.5.1a5.4 5.4 0 0 1-1.6-1 6 6 0 0 1-1.1-1.4c-.1-.2 0-.3.1-.4l.3-.4.3-.4v-.4c0-.1-.5-1.2-.7-1.6s-.3-.4-.5-.4h-.4a.9.9 0 0 0-.6.3 2.6 2.6 0 0 0-.8 1.9 4.5 4.5 0 0 0 1 2.4 10.3 10.3 0 0 0 3.9 3.4c.5.3 1 .4 1.3.5a3.1 3.1 0 0 0 1.4.1 2.3 2.3 0 0 0 1.5-1 1.9 1.9 0 0 0 .1-1c-.1-.2-.2-.2-.4-.3z"/></svg></a>
+          </div>
+        </div>
 
-        function renderMenu(category) {
-            const grid = document.getElementById('menuGrid');
-            const items = menuData[category];
-            
-            grid.innerHTML = items.map((item, index) => `
-                <div class="menu-item reveal reveal-delay-${index + 1}">
-                    <div class="flex gap-4">
-                        <div class="menu-item-image flex-shrink-0">
-                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" style="color: var(--muted); opacity: 0.3;">
-                                <circle cx="12" cy="12" r="10"/>
-                                <path d="M12 6v6l4 2"/>
-                            </svg>
-                        </div>
-                        <div class="flex-1">
-                            <div class="flex items-start justify-between gap-4 mb-2">
-                                <div>
-                                    <h3 class="font-display text-lg font-semibold">${item.name}</h3>
-                                    ${item.tag ? `<span class="text-xs px-2 py-1 rounded-full" style="background: rgba(42, 157, 143, 0.2); color: var(--teal);">${item.tag}</span>` : ''}
-                                </div>
-                                <span class="font-display text-lg font-semibold" style="color: var(--accent);">${item.price}</span>
-                            </div>
-                            <p class="text-sm" style="color: var(--muted);">${item.description}</p>
-                        </div>
-                    </div>
-                </div>
-            `).join('');
+        <div>
+          <h4>Our Practices</h4>
+          <ul class="footer-list">
+            <li><a href="optometry.html">Eye Care — Optometry</a></li>
+            <li><a href="dentistry.html">Dental — Dentistry</a></li>
+            <li><a href="physiotherapy.html">Physiotherapy</a></li>
+            <li><a href="book.html">Book an appointment</a></li>
+          </ul>
+        </div>
 
-            // Trigger reveal animations
-            setTimeout(() => {
-                document.querySelectorAll('#menuGrid .reveal').forEach(el => el.classList.add('active'));
-            }, 100);
-        }
+        <div>
+          <h4>Visit</h4>
+          <ul class="footer-list">
+            <li><a href="about.html">About us</a></li>
+            <li><a href="team.html">Our team</a></li>
+            <li><a href="contact.html">Contact</a></li>
+            <li><a href="privacy.html">Privacy (POPIA)</a></li>
+          </ul>
+        </div>
 
-        // Menu tab functionality
-        document.querySelectorAll('.menu-tab').forEach(tab => {
-            tab.addEventListener('click', () => {
-                document.querySelectorAll('.menu-tab').forEach(t => t.classList.remove('active'));
-                tab.classList.add('active');
-                currentCategory = tab.dataset.category;
-                renderMenu(currentCategory);
-            });
-        });
+        <div>
+          <h4>Get in touch</h4>
+          <ul class="footer-contact">
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg><span>Manchester Mall, 14 Manchester Rd, Rosedale, Pietermaritzburg, 3201</span></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.9.36 1.78.7 2.6a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.82.34 1.7.57 2.6.7A2 2 0 0 1 22 16.92z"/></svg><a data-site="phone" data-fill="no" href="#"></a></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v16H4z"/><polyline points="22,6 12,13 2,6"/></svg><a data-site="email" href="#"></a></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg><span>Mon–Fri 08h00–17h00 · Sat 08h30–13h00</span></li>
+          </ul>
+          <div class="footer-aids">
+            <span>Discovery</span><span>GEMS</span><span>Bonitas</span><span>Momentum</span><span>Medshield</span>
+          </div>
+        </div>
+      </div>
 
-        // Initial render
-        renderMenu(currentCategory);
+      <div class="footer-bottom">
+        <span>© <span data-year></span> Manchester Medical Centre, Pietermaritzburg. All rights reserved.</span>
+        <span>Practice no. <!-- REPLACE -->0000000 · Practitioners registered with the HPCSA · <a href="privacy.html">POPIA privacy notice</a></span>
+      </div>
+    </div>
+  </footer>
 
-        // Scroll reveal
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        };
+  <!-- ============ MOBILE ACTION BAR ============ -->
+  <nav class="action-bar" aria-label="Quick actions">
+    <a class="ab-call" data-site="phone" data-fill="no" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.9.36 1.78.7 2.6a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.82.34 1.7.57 2.6.7A2 2 0 0 1 22 16.92z"/></svg>Call</a>
+    <a class="ab-wa" data-site="whatsapp" href="#"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.6 6.3A7.9 7.9 0 0 0 12 4a8 8 0 0 0-6.9 12l-1 3.6 3.7-1a8 8 0 0 0 3.8 1h.4a8 8 0 0 0 5.6-13.7zM12 18.5a6.6 6.6 0 0 1-3.4-.9l-.2-.1-2.5.6.6-2.4-.2-.3A6.6 6.6 0 1 1 12 18.5z"/></svg>WhatsApp</a>
+    <a class="ab-book" href="book.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Book</a>
+  </nav>
+  <a class="wa-float" data-site="whatsapp" href="#" aria-label="Chat on WhatsApp"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.6 6.3A7.9 7.9 0 0 0 12 4a8 8 0 0 0-6.9 12l-1 3.6 3.7-1a8 8 0 0 0 3.8 1h.4a8 8 0 0 0 5.6-13.7zM12 18.5a6.6 6.6 0 0 1-3.4-.9l-.2-.1-2.5.6.6-2.4-.2-.3A6.6 6.6 0 1 1 12 18.5zm3.6-4.9c-.2-.1-1.2-.6-1.4-.6s-.3-.1-.5.1-.5.6-.6.8-.3.2-.5.1a5.4 5.4 0 0 1-1.6-1 6 6 0 0 1-1.1-1.4c-.1-.2 0-.3.1-.4l.3-.4.3-.4v-.4c0-.1-.5-1.2-.7-1.6s-.3-.4-.5-.4h-.4a.9.9 0 0 0-.6.3 2.6 2.6 0 0 0-.8 1.9 4.5 4.5 0 0 0 1 2.4 10.3 10.3 0 0 0 3.9 3.4c.5.3 1 .4 1.3.5a3.1 3.1 0 0 0 1.4.1 2.3 2.3 0 0 0 1.5-1 1.9 1.9 0 0 0 .1-1c-.1-.2-.2-.2-.4-.3z"/></svg></a>
 
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('active');
-                }
-            });
-        }, observerOptions);
-
-        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-
-        // Mobile menu
-        const menuToggle = document.getElementById('menuToggle');
-        const mobileMenu = document.getElementById('mobileMenu');
-        const closeMenu = document.getElementById('closeMenu');
-
-        menuToggle.addEventListener('click', () => {
-            mobileMenu.classList.add('open');
-            document.body.style.overflow = 'hidden';
-        });
-
-        closeMenu.addEventListener('click', () => {
-            mobileMenu.classList.remove('open');
-            document.body.style.overflow = '';
-        });
-
-        document.querySelectorAll('.mobile-nav-link').forEach(link => {
-            link.addEventListener('click', () => {
-                mobileMenu.classList.remove('open');
-                document.body.style.overflow = '';
-            });
-        });
-
-        // Smooth scroll for navigation
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function(e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }
-            });
-        });
-
-        // Navbar background on scroll
-        window.addEventListener('scroll', () => {
-            const nav = document.querySelector('nav');
-            if (window.scrollY > 50) {
-                nav.style.background = 'rgba(15, 20, 25, 0.98)';
-            } else {
-                nav.style.background = 'rgba(15, 20, 25, 0.9)';
-            }
-        });
-    </script>
+  <script src="assets/js/main.js"></script>
 </body>
 </html>
