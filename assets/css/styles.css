@@ -211,6 +211,7 @@ p:last-child { margin-bottom: 0; }
 .mobile-menu .mm-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
 .mobile-menu a { font-family: var(--font-head); font-weight: 600; color: var(--ink); padding: 13px 12px; border-radius: var(--r-sm); font-size: 1.05rem; }
 .mobile-menu a:hover { background: var(--bg-soft); }
+.mobile-menu .mm-sub { display: flex; flex-direction: column; }
 .mobile-menu .mm-sub a { font-size: .98rem; padding-left: 26px; color: var(--body); }
 .mobile-menu .mm-label { font-size: .72rem; text-transform: uppercase; letter-spacing: .14em; color: var(--muted); padding: 14px 12px 4px; font-weight: 700; }
 .mobile-menu .btn { margin-top: 10px; }
@@ -265,9 +266,7 @@ p:last-child { margin-bottom: 0; }
   overflow: hidden;
 }
 .photo-slot::after {
-  content: attr(data-label); position: absolute; bottom: 10px; left: 0; right: 0;
-  text-align: center; font-family: var(--font-head); font-size: .74rem; font-weight: 600;
-  color: rgba(14,90,138,.6); letter-spacing: .04em;
+  content: none;  /* caption hidden for the demo; data-label stays in HTML for later */
 }
 .photo-slot svg { width: 54px; height: 54px; opacity: .55; }
 .ratio-43 { aspect-ratio: 4/3; }
